@@ -1,0 +1,30 @@
+{
+  "name": "qs-dom",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "awesome-typescript-loader": "^4.0.1",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.4.3",
+    "microbundle": "^0.4.4",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-dev-server": "^3.1.1",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "scripts": {
+    "watch": "webpack-dev-server --content-base build --env=dev",
+    "cleanup": "rimraf ./tmp && rimraf ./dist/__tmp.js",
+    "build:pre": "BABEL_ENV=production babel ./src --out-dir ./tmp",
+    "build:main": "microbundle tmp/index.js -o dist/index.js -f cjs --external all --sourcemap false",
+    "build": "npm run build:pre && npm run build:main && npm run cleanup",
+    "test": "jest",
+    "prepublish": "npm run build"
+  }
+}
