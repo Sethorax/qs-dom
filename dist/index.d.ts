@@ -1,4 +1,4 @@
-declare module 'q-dom' {
+declare module 'qs-dom' {
     export = QSDomFactory;
 
     interface QSDom {
