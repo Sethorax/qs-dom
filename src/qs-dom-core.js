@@ -11,6 +11,8 @@ export const QSDomCore = function(elementsOrSelector) {
     const element = elements[0] || {};
 
     return {
+        get $() { return this.get(); },
+
         get length() { return elements.length; },
 
         get width() {
