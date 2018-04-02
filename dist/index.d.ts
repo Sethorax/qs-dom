@@ -65,6 +65,29 @@ interface QSDom {
     get(index = 0): HTMLElement;
 
     /**
+     * Returns all elements in the object.
+     * 
+     * @returns {Array}
+     */
+    getAll(): Array;
+
+    /**
+     * Finds the first matching child element of the current element in the object.
+     * 
+     * @param {string} selector CSS selector
+     * @returns {HTMLElement}
+     */
+    find(selector: string): HTMLElement;
+
+    /**
+     * Finds all matching child elements of the current element in the object.
+     * 
+     * @param {string} selector CSS selector
+     * @returns {QSDom}
+     */
+    findAll(selector: string): QSDom;
+
+    /**
      * Checks if the current element has the given css class.
      * 
      * @param {string} className CSS class name

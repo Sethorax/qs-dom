@@ -58,6 +58,18 @@ export const QSDomCore = function(elementsOrSelector) {
             return elements[index];
         },
 
+        getAll() {
+            return elements;
+        },
+
+        find(selector) {
+            return element.querySelector(selector);
+        },
+
+        findAll(selector) {
+            return QSDomCore(element.querySelectorAll(selector));
+        },
+
         hasClass(className) {
             return element.className.indexOf(className) > -1;
         },
