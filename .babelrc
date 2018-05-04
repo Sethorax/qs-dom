@@ -5,8 +5,7 @@
                 "env"
             ],
             "plugins": [
-                "transform-object-rest-spread",
-                ["transform-react-jsx", { "pragma":"h" }]
+                "transform-object-rest-spread"
             ]
         },
         "test": {
@@ -14,14 +13,12 @@
                 "env"
             ],
             "plugins": [
-                "transform-object-rest-spread",
-                ["transform-react-jsx", { "pragma":"h" }]
+                "transform-object-rest-spread"
             ]
         },
         "production": {
             "plugins": [
-                "transform-object-rest-spread",
-                ["transform-react-jsx", { "pragma":"h" }]
+                "transform-object-rest-spread"
             ]
         }
     }

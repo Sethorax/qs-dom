@@ -71,15 +71,15 @@ export const QSDomCore = function(elementsOrSelector) {
         },
 
         hasClass(className) {
-            return element.className.indexOf(className) > -1;
+            return element.className && element.className.indexOf(className) > -1;
         },
 
         addClass(className) {
-            element.classList.add(className);
+            element.classList && element.classList.add(className);
         },
 
         removeClass(className) {
-            element.classList.remove(className);
+            element.classList && element.classList.remove(className);
         },
 
         remove() {
