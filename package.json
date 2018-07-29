@@ -1,31 +1,54 @@
 {
   "name": "qs-dom",
-  "version": "0.1.5",
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "version": "0.2.0",
+  "description": "Fast and tiny library to help with traversing and manipulating the DOM.",
+  "main": "dist/qs-dom.umd.js",
+  "module": "dist/qs-dom.es5.js",
+  "types": "dist/types/qs-dom.d.ts",
+  "repository": "https://github.com/Sethorax/qs-dom.git",
+  "author": "Sethorax <info@sethorax.com>",
   "license": "MIT",
   "devDependencies": {
-    "awesome-typescript-loader": "^4.0.1",
-    "babel": "^6.23.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "jest": "^22.4.3",
-    "microbundle": "^0.4.4",
+    "@types/jest": "^23.3.1",
+    "@types/jsdom": "^11.0.6",
+    "jest": "^23.4.2",
+    "jsdom": "^11.12.0",
+    "lodash.camelcase": "^4.3.0",
     "rimraf": "^2.6.2",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12",
-    "webpack-dev-server": "^3.1.1",
-    "webpack-node-externals": "^1.6.0"
+    "rollup": "^0.63.4",
+    "rollup-plugin-commonjs": "^9.1.4",
+    "rollup-plugin-json": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.16.1",
+    "ts-jest": "^23.0.1",
+    "typescript": "^2.9.2"
   },
   "scripts": {
-    "watch": "webpack-dev-server --content-base build --env=dev",
-    "cleanup": "rimraf ./tmp && rimraf ./dist/__tmp.js",
-    "build:pre": "BABEL_ENV=production babel ./src --out-dir ./tmp",
-    "build:main": "microbundle tmp/index.js -o dist/index.js -f cjs --external all --sourcemap false",
-    "build": "npm run build:pre && npm run build:main && npm run cleanup",
-    "test": "jest",
-    "prepublish": "npm run build"
+    "prebuild": "rimraf dist",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "verbose": true,
+    "testURL": "http://localhost/",
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.test.json"
+      }
+    }
   }
 }
