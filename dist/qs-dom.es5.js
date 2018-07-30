@@ -1,7 +1,10 @@
 var QSDom = /** @class */ (function () {
     function QSDom(elementsOrSelector) {
         this.elementMatchesSelector = function (element, selector) {
-            return element.matches(selector) || element.webkitMatchesSelector(selector) || element.msMatchesSelector(selector) || false;
+            return element.matches(selector) ||
+                (element.webkitMatchesSelector && element.webkitMatchesSelector(selector)) ||
+                (element.msMatchesSelector && element.msMatchesSelector(selector)) ||
+                false;
         };
         var input = this.normalizeInput(elementsOrSelector);
         if (input === null) {
@@ -9,6 +12,7 @@ var QSDom = /** @class */ (function () {
         }
         if (input.isDocOrWin) {
             this.element = input.elements[0];
+            this.elements = input.elements;
         }
         else {
             this.elements = input.elements;
@@ -100,10 +104,23 @@ var QSDom = /** @class */ (function () {
     });
     QSDom.prototype.get = function (index) {
         if (index === void 0) { index = 0; }
-        return this.elements[index];
+        var e = this.elements[index];
+        return this.isElement(e) && e;
     };
     QSDom.prototype.getAll = function () {
         return this.elements;
+    };
+    QSDom.prototype.getIndexInParent = function () {
+        if (this.isElement(this.element)) {
+            var pos = -1;
+            var childs = this.element.parentElement.children;
+            for (var i = 0; i < childs.length; i++) {
+                if (childs[i] === this.element)
+                    pos = i;
+            }
+            return pos;
+        }
+        return -1;
     };
     QSDom.prototype.find = function (selector) {
         return this.isQueryable(this.element) ? this.element.querySelector(selector) : null;
@@ -111,19 +128,19 @@ var QSDom = /** @class */ (function () {
     QSDom.prototype.forEach = function (callback) {
         var _this = this;
         this.elements.forEach(function (element, index) {
-            callback(element, index, _this.length);
+            _this.isElement(element) && callback(element, index, _this.length);
         });
     };
     QSDom.prototype.map = function (callback) {
         var _this = this;
         return this.elements.map(function (element, index) {
-            return callback(element, index, _this.length);
+            return _this.isElement(element) && callback(element, index, _this.length);
         });
     };
     QSDom.prototype.filter = function (callback) {
         var _this = this;
         return this.elements.filter(function (element, index) {
-            return callback(element, index, _this.length);
+            return _this.isElement(element) ? callback(element, index, _this.length) : false;
         });
     };
     QSDom.prototype.addClass = function () {
@@ -149,41 +166,47 @@ var QSDom = /** @class */ (function () {
         this.isElement(this.element) && this.element.parentNode.removeChild(this.element);
     };
     QSDom.prototype.insertAfter = function (element) {
-        this.isElement(this.element) && this.element.insertAdjacentElement('afterend', element);
+        if (this.isElement(this.element)) {
+            var pos = this.getIndexInParent();
+            this.element.parentElement.insertBefore(element, this.element.parentElement.children[pos + 1]);
+        }
     };
     QSDom.prototype.insertBefore = function (element) {
-        this.isElement(this.element) && this.element.insertAdjacentElement('beforebegin', element);
+        if (this.isElement(this.element)) {
+            this.element.parentElement.insertBefore(element, this.element);
+        }
     };
     QSDom.prototype.append = function (element) {
         this.isElement(this.element) && this.element.appendChild(element);
     };
     QSDom.prototype.prepend = function (element) {
-        this.isElement(this.element) && this.element.insertAdjacentElement('afterbegin', element);
+        this.isElement(this.element) && this.element.insertBefore(element, this.element.firstChild);
     };
     QSDom.prototype.on = function (eventNames, callback) {
         var _this = this;
         eventNames.split(" ").forEach(function (eventName) {
-            _this.forEach(function (element) { return element.addEventListener(eventName, callback); });
+            var check = function (element) {
+                element.addEventListener(eventName, callback);
+            };
+            _this.isElement(_this.element) ? _this.forEach(check) : check(_this.element);
         });
     };
-    QSDom.prototype.onChildEventMatch = function (eventName, ElementsOrSelector, callback) {
+    QSDom.prototype.onChildEventMatch = function (eventNames, elementOrSelector, callback) {
         var _this = this;
         var match = function (element) {
-            if (typeof ElementsOrSelector === 'string' && element instanceof HTMLElement) {
-                return _this.elementMatchesSelector(element, ElementsOrSelector);
+            if (typeof elementOrSelector === 'string' && element instanceof HTMLElement) {
+                return _this.elementMatchesSelector(element, elementOrSelector);
             }
-            return element === ElementsOrSelector;
+            return element === elementOrSelector;
         };
-        eventName.split(" ").forEach(function (eventName) {
-            _this.forEach(function (element) { return element.addEventListener(eventName, function (event) {
-                var matchFound = false;
-                _this.getEventPath(event).forEach(function (pathElement) {
-                    if (!matchFound && pathElement instanceof HTMLElement && match(pathElement)) {
-                        matchFound = true;
-                        callback(event, pathElement);
-                    }
-                });
-            }); });
+        this.on(eventNames, function (event) {
+            var matchFound = false;
+            _this.getEventPath(event).forEach(function (pathElement) {
+                if (!matchFound && pathElement instanceof HTMLElement && match(pathElement)) {
+                    matchFound = true;
+                    callback(event, pathElement);
+                }
+            });
         });
     };
     QSDom.prototype.dispatchEvent = function (eventName, data) {
@@ -222,7 +245,7 @@ var QSDom = /** @class */ (function () {
         if (elementsOrSelector instanceof HTMLElement) {
             return { elements: new Array(elementsOrSelector), isDocOrWin: false };
         }
-        if (elementsOrSelector instanceof Document || elementsOrSelector instanceof Window) {
+        if (elementsOrSelector === document || elementsOrSelector === window) {
             return { elements: new Array(elementsOrSelector), isDocOrWin: true };
         }
         return null;
@@ -251,7 +274,7 @@ var QSDom = /** @class */ (function () {
     };
     return QSDom;
 }());
-var qsDom = (function (elementsOrSelector) { return new QSDom(elementsOrSelector); });
+var factory = function (elementsOrSelector) { return new QSDom(elementsOrSelector); };
 
-export default qsDom;
-export { QSDom };
+export default factory;
+export { QSDom, factory };

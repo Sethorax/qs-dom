@@ -16,11 +16,12 @@ export declare class QSDom {
         left: number;
     };
     get(index?: number): HTMLElement;
-    getAll(): HTMLElement[];
+    getAll(): SupportedElement[];
+    getIndexInParent(): number;
     find(selector: string): Element;
     forEach(callback: (element: HTMLElement, index: number, total: number) => void): void;
     map<T>(callback: (element: HTMLElement, index: number, total: number) => T): T[];
-    filter(callback: (element: HTMLElement, index: number, total: number) => boolean): HTMLElement[];
+    filter(callback: (element: HTMLElement, index: number, total: number) => boolean): SupportedElement[];
     addClass(...classNames: string[]): void;
     removeClass(...classNames: string[]): void;
     hasClass(className: string): boolean;
@@ -30,7 +31,7 @@ export declare class QSDom {
     append(element: HTMLElement): void;
     prepend(element: HTMLElement): void;
     on(eventNames: string, callback: EventListener): void;
-    onChildEventMatch(eventName: string, ElementsOrSelector: string | HTMLElement, callback: (event: Event, matchedElement: HTMLElement) => void): void;
+    onChildEventMatch(eventNames: string, elementOrSelector: string | HTMLElement, callback: (event: Event, matchedElement: HTMLElement) => void): void;
     dispatchEvent<T>(eventName: string, data?: T): void;
     private getEventPath;
     private normalizeInput;
@@ -41,5 +42,5 @@ export declare class QSDom {
     private isQueryable;
     private isElement;
 }
-declare const _default: (elementsOrSelector: ElementsOrSelector) => QSDom;
-export default _default;
+export declare const factory: (elementsOrSelector: ElementsOrSelector) => QSDom;
+export default factory;

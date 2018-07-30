@@ -304,4 +304,5 @@ export class QSDom {
     }
 }
 
-export default (elementsOrSelector: ElementsOrSelector) => new QSDom(elementsOrSelector);
+export const factory = (elementsOrSelector: ElementsOrSelector) => new QSDom(elementsOrSelector);
+export default factory;
