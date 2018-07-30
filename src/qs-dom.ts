@@ -14,7 +14,7 @@ interface Input {
 
 export class QSDom {
     private element?: SupportedElement;
-    private elements?: HTMLElement[];
+    private elements?: SupportedElement[];
 
     public constructor(elementsOrSelector: ElementsOrSelector) {
         const input = this.normalizeInput(elementsOrSelector);
@@ -25,6 +25,7 @@ export class QSDom {
 
         if (input.isDocOrWin) {
             this.element = input.elements[0];
+            this.elements = input.elements;
         } else {
             this.elements = input.elements as HTMLElement[];
             this.element = input.elements[0];
@@ -100,11 +101,27 @@ export class QSDom {
     }
 
     public get(index = 0) {
-        return this.elements[index];
+        const e = this.elements[index];
+        return this.isElement(e) && e;
     }
 
     public getAll() {
         return this.elements;
+    }
+
+    public getIndexInParent() {
+        if (this.isElement(this.element)) {
+            let pos = -1;
+            const childs = this.element.parentElement.children;
+
+            for (let i = 0; i < childs.length; i++) {
+                if (childs[i] === this.element) pos = i;
+            }
+
+            return pos;
+        }
+
+        return -1;
     }
 
     public find(selector: string) {
@@ -113,19 +130,19 @@ export class QSDom {
 
     public forEach(callback: (element: HTMLElement, index: number, total: number) => void) {
         this.elements.forEach((element, index) => {
-            callback(element, index, this.length);
+            this.isElement(element) && callback(element, index, this.length);
         });
     }
 
     public map<T>(callback: (element: HTMLElement, index: number, total: number) => T) {
         return this.elements.map((element, index) => {
-            return callback(element, index, this.length);
+            return this.isElement(element) && callback(element, index, this.length);
         });
     }
 
     public filter(callback: (element: HTMLElement, index: number, total: number) => boolean) {
         return this.elements.filter((element, index) => {
-            return callback(element, index, this.length);
+            return this.isElement(element) ? callback(element, index, this.length) : false;
         });
     }
 
@@ -146,11 +163,16 @@ export class QSDom {
     }
 
     public insertAfter(element: HTMLElement) {
-        this.isElement(this.element) && this.element.insertAdjacentElement('afterend', element);
+        if (this.isElement(this.element)) {
+            const pos = this.getIndexInParent();
+            this.element.parentElement.insertBefore(element, this.element.parentElement.children[pos + 1]);
+        }
     }
 
     public insertBefore(element: HTMLElement) {
-        this.isElement(this.element) && this.element.insertAdjacentElement('beforebegin', element);
+        if (this.isElement(this.element)) {
+            this.element.parentElement.insertBefore(element, this.element);
+        }
     }
 
     public append(element: HTMLElement) {
@@ -158,36 +180,36 @@ export class QSDom {
     }
 
     public prepend(element: HTMLElement) {
-        this.isElement(this.element) && this.element.insertAdjacentElement('afterbegin', element);
+        this.isElement(this.element) && this.element.insertBefore(element, this.element.firstChild);
     }
 
     public on(eventNames: string, callback: EventListener) {
         eventNames.split(" ").forEach(eventName => {
-            this.forEach(element => element.addEventListener(eventName, callback));
+            const check = (element: SupportedElement) => {
+                element.addEventListener(eventName, callback);
+            };
+
+            this.isElement(this.element) ? this.forEach(check) : check(this.element);
         });
     }
 
-    public onChildEventMatch(eventName: string, ElementsOrSelector: string | HTMLElement, callback: (event: Event, matchedElement: HTMLElement) => void) {
+    public onChildEventMatch(eventNames: string, elementOrSelector: string | HTMLElement, callback: (event: Event, matchedElement: HTMLElement) => void) {
         const match = (element: SupportedElement) => {
-            if (typeof ElementsOrSelector === 'string' && element instanceof HTMLElement) {
-                return this.elementMatchesSelector(element, ElementsOrSelector);
+            if (typeof elementOrSelector === 'string' && element instanceof HTMLElement) {
+                return this.elementMatchesSelector(element, elementOrSelector);
             }
 
-            return element === ElementsOrSelector;
+            return element === elementOrSelector;
         };
-
-        eventName.split(" ").forEach(eventName => {
-            this.forEach(element => element.addEventListener(eventName, event => {
-                let matchFound = false;
-
-
-                this.getEventPath(event).forEach(pathElement => {
-                    if (!matchFound && pathElement instanceof HTMLElement && match(pathElement)) {
-                        matchFound = true;
-                        callback(event, pathElement);
-                    }
-                });
-            }));
+    
+        this.on(eventNames, event => {
+            let matchFound = false;
+            this.getEventPath(event).forEach(pathElement => {
+                if (!matchFound && pathElement instanceof HTMLElement && match(pathElement)) {
+                    matchFound = true;
+                    callback(event, pathElement);
+                }
+            });
         });
     }
 
@@ -237,7 +259,7 @@ export class QSDom {
             return { elements: new Array(elementsOrSelector), isDocOrWin: false };
         }
 
-        if (elementsOrSelector instanceof Document || elementsOrSelector instanceof Window) {
+        if (elementsOrSelector === document || elementsOrSelector === window) {
             return { elements: new Array(elementsOrSelector), isDocOrWin: true };
         }
     
@@ -257,13 +279,16 @@ export class QSDom {
     
         return nodes;
     }
-    
+
     private getElementsFromSelector (selector: string) {
         return this.convertNodeListToArray(document.querySelectorAll(selector));
     }
 
     private elementMatchesSelector = (element: HTMLElement, selector: string) => {
-        return element.matches(selector) || element.webkitMatchesSelector(selector) || element.msMatchesSelector(selector) || false;
+        return element.matches(selector) ||
+            (element.webkitMatchesSelector && element.webkitMatchesSelector(selector)) ||
+            (element.msMatchesSelector && element.msMatchesSelector(selector)) ||
+            false;
     }
 
     private isEventWithPath(event: Event): event is EventWithPath {
