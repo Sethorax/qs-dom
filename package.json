@@ -1,6 +1,6 @@
 {
   "name": "qs-dom",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Fast and tiny library to help with traversing and manipulating the DOM.",
   "main": "dist/qs-dom.umd.js",
   "module": "dist/qs-dom.es5.js",

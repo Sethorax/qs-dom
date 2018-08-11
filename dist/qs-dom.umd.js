@@ -131,6 +131,9 @@
         QSDom.prototype.find = function (selector) {
             return this.isQueryable(this.element) ? this.element.querySelector(selector) : null;
         };
+        QSDom.prototype.findAll = function (selector) {
+            return this.isQueryable(this.element) ? new QSDom(this.element.querySelectorAll(selector)) : null;
+        };
         QSDom.prototype.forEach = function (callback) {
             var _this = this;
             this.elements.forEach(function (element, index) {

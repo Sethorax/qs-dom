@@ -19,6 +19,7 @@ export declare class QSDom {
     getAll(): SupportedElement[];
     getIndexInParent(): number;
     find(selector: string): Element;
+    findAll(selector: string): QSDom;
     forEach(callback: (element: HTMLElement, index: number, total: number) => void): void;
     map<T>(callback: (element: HTMLElement, index: number, total: number) => T): T[];
     filter(callback: (element: HTMLElement, index: number, total: number) => boolean): SupportedElement[];

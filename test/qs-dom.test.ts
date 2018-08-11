@@ -1,4 +1,4 @@
-import $$ from "../src/qs-dom";
+import $$, { QSDom } from "../src/qs-dom";
 import { triggerEvent } from "./utils";
 
 HTMLElement.prototype.insertAdjacentElement = function(position, element) {
@@ -160,6 +160,13 @@ describe('QSDom DOM methods', () => {
 
     it('should find child element by selector', () => {
         expect($$('.content').find('.navigation')).not.toBeNull();
+    });
+
+    it('should find all elements by selector', () => {
+        const $ = $$('.header .navigation').findAll('.link');
+
+        expect($).toBeInstanceOf(QSDom);
+        expect($.length).toBe(3);
     });
 
     it('should get index in parent', () => {

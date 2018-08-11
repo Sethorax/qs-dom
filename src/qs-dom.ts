@@ -128,6 +128,10 @@ export class QSDom {
         return this.isQueryable(this.element) ? this.element.querySelector(selector) : null;
     }
 
+    public findAll(selector: string) {
+        return this.isQueryable(this.element) ? new QSDom(this.element.querySelectorAll(selector)) : null;
+    }
+
     public forEach(callback: (element: HTMLElement, index: number, total: number) => void) {
         this.elements.forEach((element, index) => {
             this.isElement(element) && callback(element, index, this.length);
