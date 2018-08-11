@@ -235,7 +235,7 @@ var QSDom = /** @class */ (function () {
             }
             return pathArr;
         };
-        return this.isEventWithPath(event) ? event.path || event.composedPath : polyfill();
+        return this.isEventWithPath(event) ? event.path || event.composedPath() : polyfill();
     };
     QSDom.prototype.normalizeInput = function (elementsOrSelector) {
         if (typeof elementsOrSelector === "string") {
