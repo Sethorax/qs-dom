@@ -289,7 +289,7 @@ export class QSDom {
     }
 
     private elementMatchesSelector = (element: HTMLElement, selector: string) => {
-        return element.matches(selector) ||
+        return (element.matches && element.matches(selector)) ||
             (element.webkitMatchesSelector && element.webkitMatchesSelector(selector)) ||
             (element.msMatchesSelector && element.msMatchesSelector(selector)) ||
             false;

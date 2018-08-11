@@ -1,7 +1,7 @@
 var QSDom = /** @class */ (function () {
     function QSDom(elementsOrSelector) {
         this.elementMatchesSelector = function (element, selector) {
-            return element.matches(selector) ||
+            return (element.matches && element.matches(selector)) ||
                 (element.webkitMatchesSelector && element.webkitMatchesSelector(selector)) ||
                 (element.msMatchesSelector && element.msMatchesSelector(selector)) ||
                 false;
