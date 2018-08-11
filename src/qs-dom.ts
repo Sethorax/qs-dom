@@ -4,7 +4,7 @@ type Queryable = HTMLElement | Document;
 
 interface EventWithPath extends Event {
     path?: EventTarget[];
-    composedPath?: EventTarget[];
+    composedPath?: () => EventTarget[];
 }
 
 interface Input {
@@ -243,7 +243,7 @@ export class QSDom {
             return pathArr;
         };
 
-        return this.isEventWithPath(event) ? event.path || event.composedPath : polyfill();
+        return this.isEventWithPath(event) ? event.path || event.composedPath() : polyfill();
     }
 
     private normalizeInput(elementsOrSelector: any): Input {
