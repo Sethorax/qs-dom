@@ -1,11 +1,11 @@
 {
-  "name": "qs-dom",
-  "version": "0.2.4",
+  "name": "@sethorax/quicksilver",
+  "version": "1.0.0",
   "description": "Fast and tiny library to help with traversing and manipulating the DOM.",
-  "main": "dist/qs-dom.umd.js",
-  "module": "dist/qs-dom.es5.js",
-  "types": "dist/types/qs-dom.d.ts",
-  "repository": "https://github.com/Sethorax/qs-dom.git",
+  "main": "dist/quicksilver.umd.js",
+  "module": "dist/quicksilver.es5.js",
+  "types": "dist/types/quicksilver.d.ts",
+  "repository": "https://github.com/Sethorax/quicksilver.git",
   "author": "Sethorax <info@sethorax.com>",
   "license": "MIT",
   "devDependencies": {

@@ -1,6 +1,6 @@
 export declare type SupportedElement = HTMLElement | Document | Window;
 export declare type ElementsOrSelector = SupportedElement[] | SupportedElement | NodeList | string;
-export declare class QSDom {
+export declare class Quicksilver {
     private element?;
     private elements?;
     constructor(elementsOrSelector: ElementsOrSelector);
@@ -19,7 +19,7 @@ export declare class QSDom {
     getAll(): SupportedElement[];
     getIndexInParent(): number;
     find(selector: string): Element;
-    findAll(selector: string): QSDom;
+    findAll(selector: string): Quicksilver;
     forEach(callback: (element: HTMLElement, index: number, total: number) => void): void;
     map<T>(callback: (element: HTMLElement, index: number, total: number) => T): T[];
     filter(callback: (element: HTMLElement, index: number, total: number) => boolean): SupportedElement[];
@@ -43,5 +43,5 @@ export declare class QSDom {
     private isQueryable;
     private isElement;
 }
-export declare const factory: (elementsOrSelector: ElementsOrSelector) => QSDom;
+export declare const factory: (elementsOrSelector: ElementsOrSelector) => Quicksilver;
 export default factory;

@@ -1,4 +1,4 @@
-import $$, { QSDom } from "../src/qs-dom";
+import $$, { Quicksilver } from "../src/quicksilver";
 import { triggerEvent } from "./utils";
 
 HTMLElement.prototype.insertAdjacentElement = function(position, element) {
@@ -38,48 +38,48 @@ const setHTML = () => {
     </main>`;
 };
 
-describe('QSDom construction', () => {
+describe('Quicksilver construction', () => {
     beforeEach(() => {
         setHTML();      
     });
 
     it('should construct with selector string', () => {
-        const qsdom = () => $$('.link');
+        const Quicksilver = () => $$('.link');
 
-        expect(qsdom).not.toThrowError();
-        expect(qsdom().$).not.toBeNull();
-        expect(qsdom().length).toBe(3);
+        expect(Quicksilver).not.toThrowError();
+        expect(Quicksilver().$).not.toBeNull();
+        expect(Quicksilver().length).toBe(3);
     });
 
     it('should construct with NodeList', () => {
         const nodeList = document.querySelectorAll('.link');
-        const qsdom = () => $$(nodeList);
+        const Quicksilver = () => $$(nodeList);
 
-        expect(qsdom).not.toThrowError();
-        expect(qsdom().$).not.toBeNull();
-        expect(qsdom().length).toBe(3);
+        expect(Quicksilver).not.toThrowError();
+        expect(Quicksilver().$).not.toBeNull();
+        expect(Quicksilver().length).toBe(3);
     });
 
     it('should construct with HTMLElement', () => {
         const element = document.getElementsByClassName('.link')[0];
 
         if (element instanceof HTMLElement) {
-            const qsdom = () => $$(element);
+            const Quicksilver = () => $$(element);
     
-            expect(qsdom).not.toThrowError();
-            expect(qsdom().$).not.toBeNull();
-            expect(qsdom().length).toBe(1);
+            expect(Quicksilver).not.toThrowError();
+            expect(Quicksilver().$).not.toBeNull();
+            expect(Quicksilver().length).toBe(1);
         }
     });
 
     it('should throw error if constructed with wrong argument', () => {
-        const qsdom = () => $$(undefined);
+        const Quicksilver = () => $$(undefined);
 
-        expect(qsdom).toThrowError();
+        expect(Quicksilver).toThrowError();
     });
 });
 
-describe('QSDom array methods', () => {
+describe('Quicksilver array methods', () => {
     beforeEach(() => setHTML());
 
     it('should have correct length depending on match count', () => {
@@ -155,7 +155,7 @@ describe('QSDom array methods', () => {
     });
 });
 
-describe('QSDom DOM methods', () => {
+describe('Quicksilver DOM methods', () => {
     beforeEach(() => setHTML());
 
     it('should find child element by selector', () => {
@@ -165,7 +165,7 @@ describe('QSDom DOM methods', () => {
     it('should find all elements by selector', () => {
         const $ = $$('.header .navigation').findAll('.link');
 
-        expect($).toBeInstanceOf(QSDom);
+        expect($).toBeInstanceOf(Quicksilver);
         expect($.length).toBe(3);
     });
 
@@ -339,7 +339,7 @@ describe('QSDom DOM methods', () => {
     });
 });
 
-describe('QSDom Event methods', () => {
+describe('Quicksilver Event methods', () => {
     beforeEach(() => setHTML());
 
     it('should listen on event', () => {
@@ -457,7 +457,7 @@ describe('QSDom Event methods', () => {
     });
 });
 
-describe('QSDOM DocWin variants', () => {
+describe('Quicksilver DocWin variants', () => {
     beforeEach(() => setHTML());
 
     it('should return index in parent as -1', () => {

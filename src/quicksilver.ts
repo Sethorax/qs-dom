@@ -12,7 +12,7 @@ interface Input {
     isDocOrWin: boolean;
 }
 
-export class QSDom {
+export class Quicksilver {
     private element?: SupportedElement;
     private elements?: SupportedElement[];
 
@@ -129,7 +129,7 @@ export class QSDom {
     }
 
     public findAll(selector: string) {
-        return this.isQueryable(this.element) ? new QSDom(this.element.querySelectorAll(selector)) : null;
+        return this.isQueryable(this.element) ? new Quicksilver(this.element.querySelectorAll(selector)) : null;
     }
 
     public forEach(callback: (element: HTMLElement, index: number, total: number) => void) {
@@ -308,5 +308,5 @@ export class QSDom {
     }
 }
 
-export const factory = (elementsOrSelector: ElementsOrSelector) => new QSDom(elementsOrSelector);
+export const factory = (elementsOrSelector: ElementsOrSelector) => new Quicksilver(elementsOrSelector);
 export default factory;
