@@ -1,6 +1,6 @@
 {
   "name": "@sethorax/quicksilver",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Fast and tiny library to help with traversing and manipulating the DOM.",
   "main": "dist/quicksilver.umd.js",
   "module": "dist/quicksilver.es5.js",
@@ -32,7 +32,8 @@
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^7.1.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "travis-deploy-once": "^5.0.2"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -43,7 +44,8 @@
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "semantic-release": "semantic-release",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
