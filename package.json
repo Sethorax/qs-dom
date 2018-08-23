@@ -11,10 +11,15 @@
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/jsdom": "^11.0.6",
+    "commitizen": "^2.10.1",
     "coveralls": "^3.0.2",
+    "cz-conventional-changelog": "^2.1.0",
+    "husky": "^0.14.3",
     "jest": "^23.4.2",
     "jsdom": "^11.12.0",
+    "lint-staged": "^7.2.2",
     "lodash.camelcase": "^4.3.0",
+    "prettier": "^1.14.2",
     "rimraf": "^2.6.2",
     "rollup": "^0.63.4",
     "rollup-plugin-commonjs": "^9.1.4",
@@ -22,7 +27,11 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.16.1",
+    "semantic-release": "^15.9.9",
     "ts-jest": "^23.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "tslint-config-standard": "^7.1.0",
     "typescript": "^2.9.2"
   },
   "scripts": {
@@ -31,7 +40,16 @@
     "test": "jest",
     "test:watch": "npm run test -- --watch",
     "test:prod": "npm run test -- --coverage --no-cache",
-    "report-coverage": "cat ./coverage/lcov.info | coveralls"
+    "report-coverage": "cat ./coverage/lcov.info | coveralls",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --print-width 80 --trailing-comma es5 --write",
+      "git add"
+    ]
   },
   "jest": {
     "transform": {
@@ -55,5 +73,10 @@
       }
     },
     "collectCoverage": true
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
