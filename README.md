@@ -3,10 +3,11 @@
 [![Build Status](https://travis-ci.org/Sethorax/quicksilver.svg?branch=master)](https://travis-ci.org/Sethorax/quicksilver)
 [![Coverage Status](https://coveralls.io/repos/github/Sethorax/quicksilver/badge.svg?branch=master)](https://coveralls.io/github/Sethorax/quicksilver?branch=master)
 [![npm (scoped)](https://img.shields.io/npm/v/@sethorax/quicksilver.svg)](https://www.npmjs.com/package/@sethorax/quicksilver)
-![npm type definitions](https://img.shields.io/npm/types/@sethorax/quicksilver.svg)
+[![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/@sethorax/quicksilver.svg)](https://www.npmjs.com/package/@sethorax/quicksilver)
+[![npm type definitions](https://img.shields.io/npm/types/@sethorax/quicksilver.svg)](https://www.typescriptlang.org/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![code style: prettier](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-
+[![GitHub](https://img.shields.io/github/license/sethorax/quicksilver.svg)](LICENSE.md)
 
 
 Quicksilver is a lightweight, jQuery inspired JavaScript library for manipulating the DOM. The main goal of this library is to provide a lightweight, understandable and easy to use high level API for basic DOM manipulation.
