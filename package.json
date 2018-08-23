@@ -86,14 +86,19 @@
     "access": "public"
   },
   "release": {
-      "prepare": [
-        "@semantic-release/npm",
-        {
-            "path": "@semantic-release/git",
-            "assets": ["package.json", "dist/**/*.{js,css,d.ts}"],
-            "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-        }
+    "prepare": [
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "package.json",
+          "dist/**/*.{js,css,d.ts}"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
     ],
-    "publish": ["@semantic-release/github"]
+    "publish": [
+      "@semantic-release/github"
+    ]
   }
 }
