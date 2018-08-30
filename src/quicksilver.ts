@@ -1,3 +1,10 @@
+import {
+    listToArray,
+    isEventWithPath,
+    getEventPath,
+    elementMatches,
+} from "@sethorax/browser-utils";
+
 export type SupportedElement = HTMLElement | Document | Window;
 export type ElementsOrSelector =
     | SupportedElement[]
@@ -334,7 +341,7 @@ export class Quicksilver {
                 typeof elementOrSelector === "string" &&
                 element instanceof HTMLElement
             ) {
-                return this.elementMatchesSelector(element, elementOrSelector);
+                return elementMatches(element, elementOrSelector);
             }
 
             return element === elementOrSelector;
@@ -342,7 +349,7 @@ export class Quicksilver {
 
         this.on(eventNames, event => {
             let matchFound = false;
-            this.getEventPath(event).forEach(pathElement => {
+            getEventPath(event).forEach(pathElement => {
                 if (
                     !matchFound &&
                     pathElement instanceof HTMLElement &&
@@ -368,28 +375,6 @@ export class Quicksilver {
         this.element.dispatchEvent(event);
     }
 
-    private getEventPath(event: Event) {
-        const polyfill = () => {
-            let element = event.target as Node;
-            const pathArr = new Array(element);
-
-            if (element === null || element.parentElement === null) {
-                return [];
-            }
-
-            while (element.parentElement !== null) {
-                element = element.parentElement;
-                pathArr.unshift(element);
-            }
-
-            return pathArr;
-        };
-
-        return this.isEventWithPath(event)
-            ? event.path || event.composedPath()
-            : polyfill();
-    }
-
     private normalizeInput(elementsOrSelector: any): Input {
         if (typeof elementsOrSelector === "string") {
             return {
@@ -400,7 +385,7 @@ export class Quicksilver {
 
         if (elementsOrSelector instanceof NodeList) {
             return {
-                elements: this.convertNodeListToArray(elementsOrSelector),
+                elements: listToArray(elementsOrSelector),
                 isDocOrWin: false,
             };
         }
@@ -422,43 +407,8 @@ export class Quicksilver {
         return null;
     }
 
-    private convertNodeListToArray(nodeList: NodeList | HTMLCollection) {
-        const nodes = new Array<HTMLElement>();
-
-        for (let i = 0; i < nodeList.length; i++) {
-            const n = nodeList[i];
-
-            if (n instanceof HTMLElement) {
-                nodes.push(n);
-            }
-        }
-
-        return nodes;
-    }
-
     private getElementsFromSelector(selector: string) {
-        return this.convertNodeListToArray(document.querySelectorAll(selector));
-    }
-
-    private elementMatchesSelector = (
-        element: HTMLElement,
-        selector: string
-    ) => {
-        return (
-            (element.matches && element.matches(selector)) ||
-            (element.webkitMatchesSelector &&
-                element.webkitMatchesSelector(selector)) ||
-            (element.msMatchesSelector &&
-                element.msMatchesSelector(selector)) ||
-            false
-        );
-    };
-
-    private isEventWithPath(event: Event): event is EventWithPath {
-        return (
-            (<EventWithPath>event).path !== undefined ||
-            (<EventWithPath>event).composedPath !== undefined
-        );
+        return listToArray<HTMLElement>(document.querySelectorAll(selector));
     }
 
     private isQueryable(element: SupportedElement): element is Queryable {

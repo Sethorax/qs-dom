@@ -100,5 +100,8 @@
     "publish": [
       "@semantic-release/github"
     ]
+  },
+  "dependencies": {
+    "@sethorax/browser-utils": "^1.0.0"
   }
 }
