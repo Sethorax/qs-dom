@@ -29,7 +29,6 @@
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.16.1",
     "semantic-release": "^15.9.9",
-    "travis-deploy-once": "^5.0.2",
     "ts-jest": "^23.0.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
@@ -45,8 +44,7 @@
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "semantic-release": "semantic-release",
-    "precommit": "lint-staged",
-    "travis-deploy-once": "travis-deploy-once"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
@@ -98,7 +96,8 @@
       }
     ],
     "publish": [
-      "@semantic-release/github"
+      "@semantic-release/github",
+      "@semantic-release/npm"
     ]
   },
   "dependencies": {
