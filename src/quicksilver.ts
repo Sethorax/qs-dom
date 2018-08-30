@@ -1,6 +1,5 @@
 import {
     listToArray,
-    isEventWithPath,
     getEventPath,
     elementMatches,
 } from "@sethorax/browser-utils";
@@ -12,11 +11,6 @@ export type ElementsOrSelector =
     | NodeList
     | string;
 type Queryable = HTMLElement | Document;
-
-interface EventWithPath extends Event {
-    path?: EventTarget[];
-    composedPath?: () => EventTarget[];
-}
 
 interface Input {
     elements: SupportedElement[];
